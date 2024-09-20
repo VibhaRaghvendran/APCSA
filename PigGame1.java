@@ -97,7 +97,7 @@ public class PigGame1 {
 
 	public void gameRun () {
 		int diceValue = 0;
-		while (totalCompScore < 40 && totalPlyScore < 40) {
+		while (totalCompScore < 100 && totalPlyScore < 100) {
 			if (isPlayerTurn) {
 				if (chooser().equals("h")) {
 					isPlayerTurn = !isPlayerTurn;
