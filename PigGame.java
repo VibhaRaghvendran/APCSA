@@ -1,4 +1,6 @@
 import java.util.Scanner;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 /**
  *	The game of Pig.
@@ -11,6 +13,8 @@ public class PigGame {
 	int totalCompScore = 0; // computer's total score
 	int totalPlyScore = 0; // player's total score
 	int runCompScore = 0; // score per turn (for computer)
+	int runPlyScore = 0; // score per turn (for player)
+	Scanner scan = new Scanner(System.in); // creates a class-wide scanner
 	boolean isPlayerTurn = true; // sees whose turn it is (equals true if its the player's turn, equals false if its the computer's turn
 	Dice die = new Dice();
 
@@ -21,10 +25,16 @@ public class PigGame {
 	 */
 	public PigGame () {
 		printIntroduction();
-		if (mode().equals("g")) {
+		if (mode().equals("p")) {
+			// prints intial prompts
+			System.out.println("Your turn score: " + runPlyScore); 
+			System.out.println("Your total score: " + totalPlyScore);
+			System.out.println();
+			// calls method to run the game
 			gameRun();
 		}
 		else {
+			// calls method to run statistics simulation
 			stats();
 		}
 	}
@@ -58,15 +68,14 @@ public class PigGame {
 	 * 	@return String answer
 	 */
 	public String mode () {
-		Scanner scan = new Scanner(System.in);
-		System.out.println("Do you want stats(s) or game(g)?");
+		System.out.println("Play game(p) or statistics(s)?");
 		String answer = scan.nextLine();
 		boolean found = false;
 		while (!found) {
 			if (answer.equalsIgnoreCase("s")) {
 				found = true;
 			}		
-			else if (answer.equalsIgnoreCase("g")) {
+			else if (answer.equalsIgnoreCase("p")) {
 				found = true;
 			}
 			else {
@@ -84,10 +93,9 @@ public class PigGame {
 	 * 	
 	 * 	@return String answer
 	 */
-	public String chooser () {
-		Scanner scan = new Scanner(System.in);
+	public String chooser () {		
 		String answer = "";
-		System.out.println("Do you want to roll(r) or hold(h)?");
+		System.out.println("Roll(r) or hold(h)?");
 		answer = scan.nextLine();
 		boolean found = false;
 		while (!found) {
@@ -108,12 +116,17 @@ public class PigGame {
 	}
 
 	/** 
+	 * 	Returns if "enter" is pressed
+	 */
+	
+	
+	/** 
 	 * 	Plays the actual game: 
 	 * 	Runs the game until the user or the computer reaches 100 points using a while loop
 	 */
 	public void gameRun () {
 		int diceValue = 0;
-		while (totalCompScore < 100 && totalPlyScore < 100) {
+		while ((totalCompScore + runCompScore) < 100 && (totalPlyScore + runPlyScore) < 100) {
 			if (isPlayerTurn) { 
 				if (chooser().equals("h")) {
 					isPlayerTurn = !isPlayerTurn; // if hold - switch over to the opponent's turn (true becomes false, false becomes true)
@@ -127,41 +140,74 @@ public class PigGame {
 			if (isPlayerTurn) {	// checks whose turn it is to see if the turn has to be held at 20
 				if (diceValue == 1) {
 					isPlayerTurn = !isPlayerTurn; // if diceValue is 1, switch to the opponent's turn
+					totalPlyScore += runPlyScore; // add on the the total score (player)
+					System.out.println();
+					System.out.println("You have rolled a 1. The computer will play now.");
+					System.out.println();
 					System.out.println("Your total score: " + totalPlyScore);
 					System.out.println();
-					System.out.println("**** COMPUTER'S Turn ***"); // prints out the opponent's turn (computer)
+					System.out.println("**** COMPUTER Turn ****"); // prints out the opponent's turn (computer)
+					System.out.println();
+					System.out.println("Computer's turn score: " + runCompScore);
+					System.out.println("Computer's total score: " + totalCompScore);
+					System.out.println();
+					runPlyScore = 0;
 				}
 				else {
 					System.out.println("You ROLL");
 					die.printDice(); // print out the die with the corresponding value
-					totalPlyScore += diceValue; // add on the the total score (player)
-					System.out.println("Your turn score: " + diceValue);
+					runPlyScore += diceValue; // adds on to the turn score (player)
+					System.out.println("Your turn score: " + runPlyScore);
 					System.out.println("Your total score: " + totalPlyScore);
+					System.out.println();
 				}
 
 			}
 			else { // else - must be the computer's turn
+				System.out.println("Press \"a\" for computer's turn:"); // user can press to progress the computer's turn
+				String a = scan.nextLine();
+				boolean isFound = false;
+				
+				while (!isFound) {
+					if (a.equals("a")) {
+						isFound = true;
+					}
+				}
+
 				if (diceValue == 1) {
 					isPlayerTurn = !isPlayerTurn; // if diceValue is 1, switch to the opponent's turn
+					totalCompScore += runCompScore; // add on the the total score (computer)
+					System.out.println();
+					System.out.println("The computer has rolled a 1. You will play now.");
 					System.out.println();
 					System.out.println("Computer's total score: " + totalCompScore);
 					System.out.println();
 					System.out.println("**** USER Turn ****"); // prints out the opponent's turn (user)
+					System.out.println();
+					System.out.println("Your turn score: " + runPlyScore);
+					System.out.println("Your total score: " + totalPlyScore);
+					System.out.println();
 					runCompScore = 0;
 				}
 				else {
 					System.out.println("Computer will ROLL");
 					die.printDice(); // print out the die with the corresponding value
-					totalCompScore += diceValue; // add on the the total score (computer)
-					runCompScore += diceValue; // adds on to the  turn score (computer)
-					System.out.println("Computer's turn score: " + diceValue);
+					runCompScore += diceValue; // adds on to the turn score (computer)
+					System.out.println("Computer's turn score: " + runCompScore);
 					System.out.println("Computer's total score: " + totalCompScore);
 
 					if (runCompScore >= 20) { // when the turn score reaches 20, hold
 						System.out.println();
 						System.out.println("Computer will HOLD");
 						System.out.println();
+						totalCompScore += runCompScore; // add on the the total score (computer)
 						System.out.println("Computer's total score: " + totalCompScore);
+						System.out.println();
+						System.out.println("**** USER Turn ****"); // prints out the opponent's turn (user)
+						System.out.println();
+						System.out.println("Your turn score: " + runPlyScore);
+						System.out.println("Your total score: " + totalPlyScore);
+						System.out.println();
 						isPlayerTurn = !isPlayerTurn; // switch to player's turn
 						runCompScore = 0; // resets turn score
 					}
@@ -178,19 +224,22 @@ public class PigGame {
 	 * 	Cases on whether the computer or the player won based on whose score is greater
 	 */
 	public void winningMessage() {
-		String winner;
-		if (totalPlyScore > totalCompScore) {
-			winner = "You!";
+		
+		if ((totalPlyScore + runPlyScore) > (totalCompScore + runCompScore)) {
+			totalPlyScore += runPlyScore;
+			
+			System.out.println("Congratulations! You won!");
+			System.out.println("Your total score is: " + totalPlyScore);
 		}
 		else {
-			winner = "The computer!";
+			System.out.println("Aw, you lost. Better luck next time!");
 		}
-		System.out.println("Game over! The winner is: " + winner);
-		System.out.println("Thank you for playing!");
+		System.out.println();
+		System.out.println("Thanks for playing the Pig Game!");
 	}
 
 	/** 
-	 * 	Calculates the probablilities of each case (0, 20, 21, etc.)
+	 * 	Calculates the probabilities of each case (0, 20, 21, etc.)
 	 */
 	public void stats () {
 		Scanner scan = new Scanner (System.in);
