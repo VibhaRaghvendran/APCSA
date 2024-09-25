@@ -10,12 +10,12 @@ import java.util.Scanner;
 public class MVCipher {
 	
 	String keyword = "";
+	int keyCharNum = -1;
 	Scanner scan = new Scanner (System.in);
-	boolean found;
 		
 	/** Constructor */
 	public MVCipher() { 
-		run();
+		keyword();
 	}
 
 	/**
@@ -25,7 +25,7 @@ public class MVCipher {
 		System.out.println("Welcome to the MV Cipher machine!");
 		System.out.println();
 
-		keyword();
+		
 			
 		/* Prompt for an input file name */
 		
@@ -42,19 +42,22 @@ public class MVCipher {
 	// other methods go here
 	
 	public void keyword () {		
-		found = false;
+		boolean isFound = false;
+		int count = 0;
 		
 		System.out.println("Please input a word to use as key (letters only):");
 		keyword = scan.nextLine();
 		
+		for (int i = 0; i < keyword.length(); i++) {
+			if (keyword.charAt(i) >= 32 && keyword.charAt(i) <= 64) {
+				count++;
+			}
+		}
+				
 		// update checking
-		while (!found) {
-			if (keyword.length() >= 3) {
-				for (int i = 0; i < keyword.length(); i++) {
-					if (!(keyword.charAt(i) >= 32 && keyword.charAt(i) <= 64)) {
-						found = true;
-					}
-				}
+		while (!isFound) {
+			if (keyword.length() >= 3 && count == keyword.length()) {
+				isFound = true;
 			}
 			else {
 				System.out.println("ERROR: Key must be all letters and at least 3 characters long. Enter another keyword.");
@@ -64,13 +67,21 @@ public class MVCipher {
 		
 		System.out.println("Yay!");
 	}
+	
+	public int keyLetter () {
+		int length = keyword.length();
+		keyCharNum++;
+		
+		return keyCharNum%length;
+	}
+	
 	public String mode () {
 		String answer;
 		
 		/* Prompt for encrypt or decrypt */
 		System.out.println("Encrypt(e) or decrypt(d)?"); 	
 		answer = scan.nextLine();
-		found = false;
+		boolean found = false;
 		 
 		while (!found) {
 			if (answer.equalsIgnoreCase("e")) {
@@ -95,7 +106,7 @@ public class MVCipher {
 		/* Prompt for encrypt or decrypt */
 		System.out.println("Encrypt(e) or decrypt(d)?"); 	
 		answer = scan.nextLine();
-		found = false;
+		boolean found = false;
 		 
 		while (!found) {
 			if (answer.equalsIgnoreCase("e")) {
@@ -114,12 +125,12 @@ public class MVCipher {
 		return answer;
 	}
 	
-	public void encrypt () {
-		System.out.println("encrypting");
-	}
-	
 	public String encryptOneWord (String a) {
+		char[] letters = a.toCharArray();
 		
+		for (int i = 0; i < a.length(); i++) {
+			letters[i] += (keyword.charAt(keyLetter()));
+		}
 		
 		return "";
 	}
