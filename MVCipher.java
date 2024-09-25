@@ -15,32 +15,17 @@ public class MVCipher {
 		
 	/** Constructor */
 	public MVCipher() { 
-		
+		run();
 	}
 
 	/**
 	 *	Method header goes here
 	 */
 	public void run() {
-		Scanner scan = new Scanner (System.in);
-		found = false;
-		
 		System.out.println("Welcome to the MV Cipher machine!");
 		System.out.println();
-		System.out.println("Please input a word to use as key (letters only):");
-		keyword = scan.nextLine();
-		
-		// update checking
-		while (!found) {
-			if (keyword.length() < 3) {
-				System.out.println("ERROR: Key must be all letters and at least 3 characters long");
-			}
-			/*
-			for (int i = 0; i < keyword.length(); i++) {
-				if (keyword.charAt(i)
-			}
-			*/
-		}	
+
+		keyword();
 			
 		/* Prompt for an input file name */
 		
@@ -55,6 +40,30 @@ public class MVCipher {
 	}
 	
 	// other methods go here
+	
+	public void keyword () {		
+		found = false;
+		
+		System.out.println("Please input a word to use as key (letters only):");
+		keyword = scan.nextLine();
+		
+		// update checking
+		while (!found) {
+			if (keyword.length() >= 3) {
+				for (int i = 0; i < keyword.length(); i++) {
+					if (!(keyword.charAt(i) >= 32 && keyword.charAt(i) <= 64)) {
+						found = true;
+					}
+				}
+			}
+			else {
+				System.out.println("ERROR: Key must be all letters and at least 3 characters long. Enter another keyword.");
+				keyword = scan.nextLine();
+			}		
+		}
+		
+		System.out.println("Yay!");
+	}
 	public String mode () {
 		String answer;
 		
@@ -110,7 +119,9 @@ public class MVCipher {
 	}
 	
 	public String encryptOneWord (String a) {
-		for (int i = 0; i < 
+		
+		
+		return "";
 	}
 	
 	public void decrypt () {
