@@ -1,0 +1,68 @@
+import java.util.Scanner;
+
+public class Testing {
+	String answer = "EFFF";
+	String guess;
+	Scanner scan = new Scanner (System.in);
+	
+	public Testing () {
+		getGuess();
+		printInfo();
+	}
+
+	public String getGuess () {
+		System.out.println ("What is your guess?");
+		guess = scan.nextLine();
+		
+		return guess;
+	}
+	
+	public int exactLetterTally () {
+		int count = 0;
+		
+		for (int i = 0; i < answer.length(); i++) {
+			if (answer.charAt(i) == guess.charAt(i)) {
+				count++;
+			}
+		}
+		
+		return count;
+	}
+	
+	public int partLetterTally () {
+		int count = 0;
+		
+		for (int i = 0; i < answer.length(); i++) {
+			for (int j = 0; j < guess.length(); j++) {
+				int indexI = 0;
+				int indexJ = 0;
+				if (answer.charAt(i) == guess.charAt(j) && i != j) {
+					count++;
+					indexI = i;
+					indexJ = j;
+					if (answer.charAt(indexI) == guess.charAt(indexI)) {
+						count--;
+					}
+					else if (answer.charAt(indexJ) == guess.charAt(indexJ)) {
+						count--;
+					}
+					
+				}
+			}
+		}
+		
+		return count;
+	}
+	
+	public void printInfo () {
+		int correct = exactLetterTally();
+		int partial = partLetterTally();
+		
+		System.out.println("Correct: " + correct);
+		System.out.println("Partialy correct: " + partial);
+	}
+
+	public static void main (String[] args) {
+		Testing test = new Testing();
+	}
+}
