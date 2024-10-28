@@ -22,7 +22,7 @@ public class DiceGroup {
 	
 	/*	you complete */
 	public DiceGroup() {
-		for (int i = 0; i < Dice.length; i++) {
+		for (int i = 0; i < die.length; i++) {
 			die[i] = new Dice();
 		}
 	}
@@ -30,7 +30,7 @@ public class DiceGroup {
 	/**	you complete */
 	public void rollDice() {
 		for (int i = 0; i < die.length; i++) {
-			// die[i] = die[i].roll();
+			die[i].roll();
 		}
 	}
 	
@@ -43,17 +43,24 @@ public class DiceGroup {
 	 */
 	public void rollDice(String rawHold) { 
 		for (int i = 0; i < rawHold.length(); i++) {
-			if (rawHold.charAr(i) > 5) {
+			if (rawHold.charAt(i) > 5) {
 				System.out.println("ERROR. Enter again:");
 			}
 		}
 		for (int i = 0; i < die.length; i++) {
 			if (rawHoldChecker(i, rawHold) == false) {
-				// die[i] = Dice.roll();
+				die[i].roll();
 			}
 		}
 	}
 	
+	/**	
+	 * 	Checks if a single die is in rawHold to decide if it should be rerolled
+	 * 
+	 *	@param rawHold		the string of dice to hold
+	 *	@param index 		the die number to check in rawHold
+	 *	@return isInRawHold		returns true if the die number is in rawHold, false otherwise
+	 */
 	public boolean rawHoldChecker (int x, String rawHold) {
 		for (int i = 0; i < rawHold.length(); i++) {
 			if (x == rawHold.charAt(i)) {
@@ -67,8 +74,21 @@ public class DiceGroup {
 	/**	getters - you complete */
 	
 	/**	@return the total value of the DiceGroup - you complete */
-	public int getTotal() { 
+	public int getTotal() {
+		int total = 0;
+		for (int i = 0; i < die.length; i++) {
+			total += die[i].getValue();
+		}
 		
+		return total;
+	}
+	
+	public Dice[] getDieArray () {
+		return die;
+	}
+	
+	public int getDiceValue (int i) {
+		return die[i].getValue();
 	}
 	
 	/**
