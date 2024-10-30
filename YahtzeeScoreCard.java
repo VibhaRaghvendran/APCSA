@@ -50,15 +50,29 @@ public class YahtzeeScoreCard {
 			return false;
 		}
 		
-		int count = 0;
-		for (int i = 0; i < dg.getDieArray().length; i++) {
-			if (dg.getDiceValue(i) == choice) {
-				count++;
-			}
+		if (choice >= 1 && choice <= 6) {
+			numberScore();
 		}
-		
-		if (count == 0) {
-			return false;
+		else if (choice == 7) {
+			threeOfAKind();
+		}
+		else if (choice == 8) {
+			fourOfAKind();
+		}
+		else if (choice == 9) {
+			fullHouse();
+		}
+		else if (choice == 10) {
+			smallStraight();
+		}
+		else if (choice == 11) {
+			largeStraight();
+		}
+		else if (choice == 12) {
+			chance();
+		}
+		else {
+			yahtzeeScore();
 		}
 		
 		return true;
@@ -79,9 +93,7 @@ public class YahtzeeScoreCard {
 		}
 
 		int score = count*choice;
-		if (changeScore(choice, dg) == true) {
-			//put in score
-		}
+		scores[choice - 1] = score;	
 	}
 
 	/**
@@ -112,13 +124,19 @@ public class YahtzeeScoreCard {
 			}		
 		}
 		
+		boolean found = false;
 		for (int i = 0; i < numCount.length; i++) {
 			if (numCount[i] >= 3) {
-				// valid for 3 of a kind
+				found = true;
 			}
 		}
 		
-		// else not valid
+		if (found == true) {
+			scores[6] = dg.getTotal();
+		}
+		else {
+			scores[6] = 0;
+		}
 	}
 
 	public void fourOfAKind(DiceGroup dg) {
@@ -144,13 +162,19 @@ public class YahtzeeScoreCard {
 			}		
 		}
 		
+		boolean found = false;
 		for (int i = 0; i < numCount.length; i++) {
 			if (numCount[i] >= 4) {
-				// valid for 3 of a kind
+				found = true;
 			}
 		}
 		
-		// else not valid
+		if (found == true) {
+			scores[7] = dg.getTotal();
+		}
+		else {
+			scores[7] = 0;
+		}
 	}
 
 	public void fullHouse(DiceGroup dg) {
@@ -181,29 +205,82 @@ public class YahtzeeScoreCard {
 			for (int j = i; j < 6; j++) {
 				if (numCount[i] == 3 && numCount[j] == 2 || numCount[i] == 2 && numCount[j] == 3) {
 					found = true;
-					// valid for full house
 				}
 			}
 		}
 		
+		if (found == true) {
+			scores[8] = 25;
+		}
+		else {
+			scores[8] = 0;
+		}
 	}
 
 	public void smallStraight(DiceGroup dg) {
+		int[] scores = new int[5];
+		for (int i = 0; i < scores.length; i++) {
+			scores[i] = dg.getDiceValue(i);
+		}
 		
-	}
+		scores = sortArray(scores);
+		
+		boolean found = false;
+		for (int i = 0; i < scores.length - 2; i++) {
+			if (scores[i] == scores[i+1] - 1 && scores[i+1] == scores[i+2] - 1) {
+				found = true;
+			}
+		}
+		
+		if (found == true) {
+			scores[9] = 30;
+		}
+		else {
+			scores[9] = 0;
+		}
+	}	
 
 	public void largeStraight(DiceGroup dg) {
+		int[] scores = new int[5];
+		for (int i = 0; i < scores.length; i++) {
+			scores[i] = dg.getDiceValue(i);
+		}
+		
+		scores = sortArray(scores);
+		
+		boolean found = false;
+		for (int i = 0; i < scores.length - 3; i++) {
+			if (scores[i] == scores[i+1] - 1 && scores[i+1] == scores[i+2] - 1 && scores[i+2] == scores[i+3] - 1) {
+				found = true;
+			}
+		}
+		
+		if (found == true) {
+			scores[10] = 40;
+		}
+		else {
+			scores[10] = 0;
+		}
+	}
+	
+	public int[] sortArray (int[] numbers) {
 		
 	}
 
 	public void chance(DiceGroup dg) {
 		int total = dg.getTotal();
+		scores[11] = total;
 	}
 
 	public void yahtzeeScore(DiceGroup dg) {
+		boolean found = false; 
 		if (dg.getDiceValue(0) == dg.getDiceValue(1) && dg.getDiceValue(1) == dg.getDiceValue(2) && 
 				dg.getDiceValue(2) == dg.getDiceValue(3) && dg.getDiceValue(3) == dg.getDiceValue(4)) {
-			// valid for yahtzee
+			found = true;
+			scores[12] = 50;
+		}
+		else {
+			scores[12] = 0;
 		}
 	}
 
