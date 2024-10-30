@@ -153,14 +153,58 @@ public class YahtzeeScoreCard {
 		// else not valid
 	}
 
-	public void fullHouse(DiceGroup dg) {}
+	public void fullHouse(DiceGroup dg) {
+		int[] numCount = new int[6];
+		for (int i = 0; i < dg.getDieArray().length; i++) {
+			if (dg.getDiceValue(i) == 1) {
+				numCount[0]++;
+			}
+			else if (dg.getDiceValue(i) == 2) {
+				numCount[1]++;
+			}
+			else if (dg.getDiceValue(i) == 3) {
+				numCount[2]++;
+			}
+			else if (dg.getDiceValue(i) == 4) {
+				numCount[3]++;
+			}
+			else if (dg.getDiceValue(i) == 5) {
+				numCount[4]++;
+			}
+			else {
+				numCount[5]++;
+			}		
+		}
+		
+		boolean found = false;
+		for (int i = 0; i < 6; i++) {
+			for (int j = i; j < 6; j++) {
+				if (numCount[i] == 3 && numCount[j] == 2 || numCount[i] == 2 && numCount[j] == 3) {
+					found = true;
+					// valid for full house
+				}
+			}
+		}
+		
+	}
 
-	public void smallStraight(DiceGroup dg) {}
+	public void smallStraight(DiceGroup dg) {
+		
+	}
 
-	public void largeStraight(DiceGroup dg) {}
+	public void largeStraight(DiceGroup dg) {
+		
+	}
 
-	public void chance(DiceGroup dg) {}
+	public void chance(DiceGroup dg) {
+		int total = dg.getTotal();
+	}
 
-	public void yahtzeeScore(DiceGroup dg) {}
+	public void yahtzeeScore(DiceGroup dg) {
+		if (dg.getDiceValue(0) == dg.getDiceValue(1) && dg.getDiceValue(1) == dg.getDiceValue(2) && 
+				dg.getDiceValue(2) == dg.getDiceValue(3) && dg.getDiceValue(3) == dg.getDiceValue(4)) {
+			// valid for yahtzee
+		}
+	}
 
 }
