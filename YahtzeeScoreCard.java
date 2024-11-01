@@ -1,4 +1,10 @@
 
+/**
+ *	Calculates the scores for each type of case
+ *
+ *	@author	Vibha Raghvendran
+ *	@since	October 31 2024
+ */ 
 public class YahtzeeScoreCard {
 	private int[] scores = new int[13];
 	/**
@@ -34,8 +40,20 @@ public class YahtzeeScoreCard {
 				"---------------------------+\n");
 	}
 
+	/**
+	 *  Returns the 
+	 */
 	public int getScore(int index) {
 		return scores[index - 1];
+	}
+	
+	public int getScoreCardTotal () {
+		int total = 0;
+		for (int i = 0; i < 13; i++) {
+			total += scores[i];
+		}
+		
+		return total;
 	}
 	
 	/**
@@ -218,7 +236,6 @@ public class YahtzeeScoreCard {
 	}
 
 	public void smallStraight(DiceGroup dg) {
-		int[] scores = new int[5];
 		for (int i = 0; i < scores.length; i++) {
 			scores[i] = dg.getDiceValue(i);
 		}
@@ -241,7 +258,6 @@ public class YahtzeeScoreCard {
 	}	
 
 	public void largeStraight(DiceGroup dg) {
-		int[] scores = new int[5];
 		for (int i = 0; i < scores.length; i++) {
 			scores[i] = dg.getDiceValue(i);
 		}
