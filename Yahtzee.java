@@ -1,29 +1,49 @@
 import java.util.Scanner;
 
+/**
+ *	The game of Yahtzee.
+ *
+ *	There are 13 rounds in a game of Yahtzee. In each turn, a player can roll his/her dice up to 3 times in order 
+ *  to get the desired combination. On the first roll, the player rolls all five of the dice at once. On the 
+ *  second and third rolls, the player can roll any number of dice he/she wants to, including none or all of them, 
+ *  trying to get a good combination. The player can choose whether he/she wants to roll once, twice or three times
+ *  in each turn. After the three rolls in a turn, the player must put his/her score down on the scorecard, under 
+ *  any one of the thirteen categories. The score that the player finally gets for that turn depends on the 
+ *  category/box that he/she chooses and the combination that he/she got by rolling the dice. But once a box is 
+ *  chosen on the score card, it can't be chosen again.
+ *
+ *	@author	Vibha Raghvendran
+ *	@since	October 31 2024
+ */ 
 public class Yahtzee {
-	
-	private String player1, player2;
-	Scanner scan;
-	
+
+	private String name1, name2; // names of players
+	private int finalScore1, finalScore2, roundNum; // final scores of players, number of rounds
+	private final int NUM_ROUNDS = 13; // total number of rounds
+	Scanner scan; // scanner
+	DiceGroup dg; // dice group for the game
+	YahtzeePlayer player1, player2; // instance of yahtzee player for each player
+
 	public static void main (String[] args) {
 		Yahtzee game = new Yahtzee();
 	}
-	
+
 	public Yahtzee () {
 		scan = new Scanner (System.in);
+		dg = new DiceGroup();
+		player1 = new YahtzeePlayer();
+		player2 = new YahtzeePlayer();
 		printHeader();
-		playerNames();
-		DiceGroup diceGroup = new DiceGroup();
-		diceGroup.printDice();
+		initSetup();
+		do {
+			run();
+		} while (roundNum < NUM_ROUNDS);
+		end();
 	}
-	
-	public void playerNames () {
-		System.out.println("Player 1, please enter your first name:");
-		player1 = scan.nextLine();
-		System.out.println("Player 2, please enter your first name:");
-		player2 = scan.nextLine();
-	}
-	
+
+	/**
+	 *	Prints the introduction
+	 */ 
 	public void printHeader() {
 		System.out.println("\n");
 		System.out.println("+------------------------------------------------------------------------------------+");
@@ -44,5 +64,183 @@ public class Yahtzee {
 		System.out.println("| LET'S PLAY SOME YAHTZEE!                                                           |");
 		System.out.println("+------------------------------------------------------------------------------------+");
 		System.out.println("\n\n");
+	}
+
+	/**
+	 *	Prints the initial prompt for players and decides who is going first
+	 */ 
+	public void initSetup() {
+		String name1 = "", name2 = "";
+		int tempScore1 = 0, tempScore2 = 0;
+
+		// gets the names of the players
+		System.out.println("Player 1, please enter your first name:");
+		name1 = scan.nextLine();
+		player1.setName(name1);
+		System.out.println("Player 2, please enter your first name:");
+		name2 = scan.nextLine();
+		player2.setName(name2);
+
+		// rolls the dice once for each player
+		String pushed= "";		
+		System.out.println("Let's see who will go first. " + name1 + ", Please press \"a\" to roll the dice.");
+		pushed = scan.nextLine();
+		if (pushed.equals("a")) {
+			dg.rollDice();
+			dg.printDice();
+			tempScore1 = dg.getTotal();
+		}
+		System.out.println(name2 + ", it's your turn, Please press \"a\" to roll the dice.");
+		pushed = scan.nextLine();
+		if (pushed.equals("a")) {
+			dg.rollDice();
+			dg.printDice();
+			tempScore2 = dg.getTotal();
+		}
+
+		// checks which score is greater
+		if (tempScore1 >= tempScore2) {
+			this.name1 = name1;
+			this.name2 = name2;
+		}
+		else {
+			this.name1 = name2;
+			this.name2 = name1;
+		}
+
+		// starts with the greater score
+		System.out.println(name1 + ", you rolled a sum of 16, and " + name2 + ", you rolled a sum of 17.");
+		System.out.println(this.name1 + ", since your sum was higher, you'll roll first.");
+		// prints out initial scorecard
+		player1.getScoreCard().printCardHeader();
+		player1.getScoreCard().printPlayerScore(player1);
+		player2.getScoreCard().printPlayerScore(player2);
+	}
+
+	/**
+	 *	Runs the game for 13 rounds
+	 */ 
+	public void run () {	
+		String pushed = "";
+		String rawHold = "";			
+		System.out.println();
+		System.out.println("Round " + (roundNum + 1) + " of 13"); // generates round message
+		System.out.println();
+		System.out.println(name1 + ", it's your turn to play. Please press \"a\" to roll the dice.");
+		pushed = scan.nextLine();
+		if (pushed.equals("a")) {
+			dg.rollDice();
+			dg.printDice();
+			System.out.println();
+
+			int numReroll = 0;
+			while (numReroll < 1) { // allows opportunity to roll twice
+				System.out.println("Which di(c)e would you like to keep? Enter the values you'd like to 'hold' without \r\n"
+						+ "spaces. For examples, if you'd like to 'hold' die 1, 2, and 5, enter 125 "
+						+ "(enter -1 if you'd like to end the turn)");
+				rawHold = scan.nextLine(); // scans which dice to hold
+				if (rawHold.equals("-1")) { // exits the loop if there are no dice to hold
+					break;
+				}					
+				dg.rollDice(rawHold); // rolls the dice that aren't held
+				dg.printDice(); // prints the dice
+				System.out.println("Which di(c)e would you like to keep? Enter the values you'd like to 'hold' without \r\n"
+						+ "spaces. For examples, if you'd like to 'hold' die 1, 2, and 5, enter 125 "
+						+ "(enter -1 if you'd like to end the turn)");
+				rawHold = scan.nextLine(); // prompts user again
+				dg.rollDice(rawHold);
+				dg.printDice();
+
+				numReroll++; // increments number of rerolls 
+			}
+
+			finalScore1 += dg.getTotal(); // adds to the final player score
+			// prints the score card
+			player1.getScoreCard().printCardHeader();
+			player1.getScoreCard().printPlayerScore(player1);
+			player2.getScoreCard().printPlayerScore(player2);		
+			System.out.println();
+			// prompts the user to enter a choice
+			System.out.println(name1 + ", now you need to make a choice. pick a valid integer from the list above (1 - 13):");
+			int choice = scan.nextInt();
+			// checks the choice
+			while (choice > 13) {
+				System.out.println("Invalid input. Try again.");
+				choice = scan.nextInt();
+			}
+			// inputs corresponding scores into the score card
+			player1.getScoreCard().changeScore(choice, dg);
+			player1.getScoreCard().printCardHeader();
+			player1.getScoreCard().printPlayerScore(player1);
+			player2.getScoreCard().printPlayerScore(player2);
+		}
+
+		// same process for player 2
+		System.out.println();
+		System.out.println(name2 + ", it's your turn to play. Please press \"a\" to roll the dice.");
+		pushed = scan.nextLine();
+		if (pushed.equals("a")) {
+			dg.rollDice();
+			dg.printDice();
+			System.out.println();
+
+			int numReroll = 0;
+			while (numReroll < 1) {
+				System.out.println("Which di(c)e would you like to keep? Enter the values you'd like to 'hold' without \r\n"
+						+ "spaces. For examples, if you'd like to 'hold' die 1, 2, and 5, enter 125 \r\n"
+						+ "(enter -1 if you'd like to end the turn)");
+				rawHold = scan.nextLine();
+				if (rawHold.equals("-1")) {
+					break;
+				}
+				dg.rollDice(rawHold);
+				dg.printDice();
+				System.out.println("Which di(c)e would you like to keep? Enter the values you'd like to 'hold' without \r\n"
+						+ "spaces. For examples, if you'd like to 'hold' die 1, 2, and 5, enter 125 \r\n"
+						+ "(enter -1 if you'd like to end the turn)");
+				rawHold = scan.nextLine();
+				dg.rollDice(rawHold);
+				dg.printDice();
+
+				numReroll++;
+			}
+
+			finalScore2 += dg.getTotal();
+			player1.getScoreCard().printCardHeader();
+			player1.getScoreCard().printPlayerScore(player1);
+			player2.getScoreCard().printPlayerScore(player2);	
+			System.out.println();
+			System.out.println(name2 + ", now you need to make a choice. pick a valid integer from the list above (1 - 13):");
+			int choice = scan.nextInt();
+			while (choice > 13) {
+				System.out.println("Invalid input. Try again.");
+				choice = scan.nextInt();
+			}
+			player2.getScoreCard().changeScore(choice, dg);
+			player2.getScoreCard().printCardHeader();
+			player1.getScoreCard().printPlayerScore(player1);
+			player2.getScoreCard().printPlayerScore(player2);			
+		}
+		
+		roundNum++;
+	}
+
+	/**
+	 *	Prints end message
+	 */ 
+	public void end () {
+		System.out.println(name1 + "               score total : " + finalScore1);
+		System.out.println(name2 + "               score total : " + finalScore2);
+
+		// determines who has a greater score and prints the corresponding message 
+		if (finalScore1 > finalScore2) {
+			System.out.println("Congratulations, " + name1 + "! You WON!");
+		}
+		else if (finalScore1 < finalScore2) {
+			System.out.println("Congratulations, " + name2 + "! You WON!");
+		}
+		else {
+			System.out.println("You TIED.");
+		}
 	}
 }
