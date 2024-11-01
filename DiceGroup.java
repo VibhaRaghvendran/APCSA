@@ -22,6 +22,7 @@ public class DiceGroup {
 	
 	/*	you complete */
 	public DiceGroup() {
+		die = new Dice[NUM_DICE];
 		for (int i = 0; i < die.length; i++) {
 			die[i] = new Dice();
 		}
@@ -42,11 +43,6 @@ public class DiceGroup {
 	 *	you complete
 	 */
 	public void rollDice(String rawHold) { 
-		for (int i = 0; i < rawHold.length(); i++) {
-			if (rawHold.charAt(i) > 5) {
-				System.out.println("ERROR. Enter again:");
-			}
-		}
 		for (int i = 0; i < die.length; i++) {
 			if (rawHoldChecker(i, rawHold) == false) {
 				die[i].roll();
