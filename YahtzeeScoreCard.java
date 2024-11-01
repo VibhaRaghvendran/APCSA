@@ -18,7 +18,7 @@ public class YahtzeeScoreCard {
 			scores[i] = -1;
 		}
 	}
-	
+
 	/**
 	 *  Prints the player's score
 	 */
@@ -37,7 +37,7 @@ public class YahtzeeScoreCard {
 	public int getScore(int index) {
 		return scores[index - 1];
 	}
-
+	
 	/**
 	 *  Change the scorecard based on the category choice 1-13.
 	 *
@@ -49,32 +49,32 @@ public class YahtzeeScoreCard {
 		if (scores[choice] != -1) {
 			return false;
 		}
-		
+
 		if (choice >= 1 && choice <= 6) {
-			numberScore();
+			numberScore(choice, dg);
 		}
 		else if (choice == 7) {
-			threeOfAKind();
+			threeOfAKind(dg);
 		}
 		else if (choice == 8) {
-			fourOfAKind();
+			fourOfAKind(dg);
 		}
 		else if (choice == 9) {
-			fullHouse();
+			fullHouse(dg);
 		}
 		else if (choice == 10) {
-			smallStraight();
+			smallStraight(dg);
 		}
 		else if (choice == 11) {
-			largeStraight();
+			largeStraight(dg);
 		}
 		else if (choice == 12) {
-			chance();
+			chance(dg);
 		}
 		else {
-			yahtzeeScore();
+			yahtzeeScore(dg);
 		}
-		
+
 		return true;
 	}
 
@@ -123,14 +123,14 @@ public class YahtzeeScoreCard {
 				numCount[5]++;
 			}		
 		}
-		
+
 		boolean found = false;
 		for (int i = 0; i < numCount.length; i++) {
 			if (numCount[i] >= 3) {
 				found = true;
 			}
 		}
-		
+
 		if (found == true) {
 			scores[6] = dg.getTotal();
 		}
@@ -161,14 +161,14 @@ public class YahtzeeScoreCard {
 				numCount[5]++;
 			}		
 		}
-		
+
 		boolean found = false;
 		for (int i = 0; i < numCount.length; i++) {
 			if (numCount[i] >= 4) {
 				found = true;
 			}
 		}
-		
+
 		if (found == true) {
 			scores[7] = dg.getTotal();
 		}
@@ -199,7 +199,7 @@ public class YahtzeeScoreCard {
 				numCount[5]++;
 			}		
 		}
-		
+
 		boolean found = false;
 		for (int i = 0; i < 6; i++) {
 			for (int j = i; j < 6; j++) {
@@ -208,7 +208,7 @@ public class YahtzeeScoreCard {
 				}
 			}
 		}
-		
+
 		if (found == true) {
 			scores[8] = 25;
 		}
@@ -222,16 +222,16 @@ public class YahtzeeScoreCard {
 		for (int i = 0; i < scores.length; i++) {
 			scores[i] = dg.getDiceValue(i);
 		}
-		
+
 		scores = sortArray(scores);
-		
+
 		boolean found = false;
 		for (int i = 0; i < scores.length - 2; i++) {
 			if (scores[i] == scores[i+1] - 1 && scores[i+1] == scores[i+2] - 1) {
 				found = true;
 			}
 		}
-		
+
 		if (found == true) {
 			scores[9] = 30;
 		}
@@ -245,16 +245,16 @@ public class YahtzeeScoreCard {
 		for (int i = 0; i < scores.length; i++) {
 			scores[i] = dg.getDiceValue(i);
 		}
-		
+
 		scores = sortArray(scores);
-		
+
 		boolean found = false;
 		for (int i = 0; i < scores.length - 3; i++) {
 			if (scores[i] == scores[i+1] - 1 && scores[i+1] == scores[i+2] - 1 && scores[i+2] == scores[i+3] - 1) {
 				found = true;
 			}
 		}
-		
+
 		if (found == true) {
 			scores[10] = 40;
 		}
@@ -262,9 +262,28 @@ public class YahtzeeScoreCard {
 			scores[10] = 0;
 		}
 	}
-	
+
 	public int[] sortArray (int[] numbers) {
+		for (int i = 0; i < numbers.length; i++) {  
+			int index = i;  
+			for (int j = i + 1; j < numbers.length; j++){  
+				if (numbers[j] < numbers[index]){  
+					index = j;  
+				}  
+			} 
+
+			int smallerNumber = numbers[index];   
+			numbers[index] = numbers[i];  
+			numbers[i] = smallerNumber;  
+
+			for (int a = 0; a < numbers.length; a++) {
+				System.out.print(numbers[a] + " ");
+			}
+			System.out.println();
+
+		}
 		
+		return numbers;
 	}
 
 	public void chance(DiceGroup dg) {
