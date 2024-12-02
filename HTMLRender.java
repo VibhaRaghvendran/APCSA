@@ -92,6 +92,9 @@ public class HTMLRender {
 			}
 			while (!(tokens.get(i).equalsIgnoreCase("<body>"))) {
 				i++;
+				if (i >= tokens.size()) {
+					break;
+				}
 			}
 			i++;
 			while (!(tokens.get(i).equals("</body>"))) {
@@ -385,7 +388,7 @@ public class HTMLRender {
 						i++;
 					}
 				}
-				else if (tokens.get(i).length() >= 2 && tokens.get(i).charAt(0) == '<' && tokens.get(i).charAt(1) == '/') {
+				else if (tokens.get(i).length() >= 2 && tokens.get(i).charAt(0) == '<' && tokens.get(i).charAt(1) == '/' && !(tokens.get(i).equalsIgnoreCase("</pre>"))) {
 					i++;
 				}
 				else if (tokens.get(i).equalsIgnoreCase("<pre>")) {
