@@ -1,146 +1,164 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;		// for testing purposes
+import java.util.Scanner;
 
 /**
- *	SortMethods - Sorts an ArrayList of Strings in ascending order.
+ *	WordFinder - Does the following
+ *		readWordsFromFile - reads words from a file and puts them into the List words;
+ *				the file must contain a list of random words separated by spaces
+ *				and/or new lines
+ *				
+ *		findWord - uses binary search to look for a word in the List words;
+ *				returns index of word found; returns negative number otherwise
  *
- *	Requires FileUtils class to compile.
- *	Requires file randomWords.txt to execute a test run.
+ *	Requires FileUtils class
  *
  *	@author	Vibha Raghvendran
  *	@since	January 10 2025
  */
-public class SortMethods {
-	String[] temp;
-	/**
-	 *	Merge Sort algorithm - in ascending order
-	 *	@param arr		List of String objects to sort
-	 */
-	public List<String> mergeSort(List<String> arr) {
-		int n = arr.size();
-        String[] yay = arr.toArray(new String[0]);
-        temp = new String[n];
-        mergeSortRecurse(yay,0, n - 1);
-
-        arr = new ArrayList<>((Arrays.asList(yay)));
-        return arr;
+public class WordFinder {
+		
+	private List<String> words;				// list of words
+	
+	public WordFinder() {
+		words = new ArrayList<String>();
 	}
 	
 	/**
-	 *	Recursive mergeSort method.
-	 *	@param a		Array of String objects to sort
-	 *	@param from		first index of arr to sort
-	 *	@param to		last index of arr to sort
+	 *	Read in the words from fileName
+	 *	@param fileName		name of the file containing words
 	 */
-	public void mergeSortRecurse(String[] a, int from, int to) {
-		if (to - from < 2) { // base case: 1 or 2 elements
-            if (to > from && a[to].compareTo(a[from]) < 0) {
-                String aTemp = a[to];
-                a[to] = a[from];
-                a[from] = aTemp;
-            }
-        }
-        else { // recursive case
-            int middle = (from + to)/2;
-            mergeSortRecurse(a, from, middle);
-            mergeSortRecurse(a, middle+1, to);
-            //System.out.println("from: " + from + " middle: " + middle + " to: " + to);
-            merge(a, from, middle, to);
-        }
+	public void readWordsFromFile(String fileName) {
+		Scanner inFile = FileUtils.openToRead(fileName);
+		while (inFile.hasNext())
+			words.add(inFile.next());
+		inFile.close();		
 	}
 	
 	/**
-	 *	Merge two lists that are consecutive elements in array.
-	 *	@param a		Array of String objects to merge
-	 *	@param from		first index of first list
-	 *	@param middle	the last index of the first list;
-	 *					mid + 1 is first index of second list
-	 *	@param to		last index of second list
+	 *	Uses binary search to find a word in the word List
+	 *	Precondition: words must be sorted in ascending order
+	 *	@param word		the target word to find
+	 *	@return			if found, the index of the word inside words;
+	 *					if not found, a negative number
 	 */
-	public void merge(String[] a, int from, int middle, int to) {
-		int i = from, j = middle + 1, k = from;
-        //System.out.println("i: " + i + " j: " + j + " k: " + k);
-
-        // while both arrays have elements left unprocessed:
-        while (i <= middle && j <= to) {
-            if (a[i].compareTo(a[j]) < 0) {
-                temp[k] = a[i];
-                i++;
-            }
-            else {
-                temp[k] = a[j];
-                j++;
-            }
-            k++;
-        }
-
-        // copy tail of the first half into temp
-        while (i <= middle) {
-            temp[k] = a[i];
-            i++;
-            k++;
-        }
-
-        // copy tail of the second half into temp
-        while (j <= to) {
-            temp[k] = a[j];
-            j++;
-            k++;
-        }
-
-        // copy back into original array
-        for (k = from; k <= to; k++) {
-            a[k] = temp[k];
-        }
+	public int findWord(String word) {
+		return binarySearch(words, word);
 	}
-
 	
 	/**
-	 *	Print an List of Strings to the screen
-	 *	@param arr		the List of Strings
+	 *	Binary Search - find the target in the List
+	 *	Preconditions: listOfWords is sorted in ascending order
+	 *	@param listOfWords		List of 0 or more words to check
+	 *	@param target			the word to look for
+	 *	@return					if found, the index of the word inside words;
+	 *							if not found, a negative number
 	 */
-	public void printArray(List<String> arr) {
-		if (arr.size() == 0) System.out.print("(");
-		else System.out.printf("( %-15s", arr.get(0));
-		for (int a = 1; a < arr.size(); a++) {
-			if (a % 5 == 0) System.out.printf(",\n  %-15s", arr.get(a));
-			else System.out.printf(", %-15s", arr.get(a));
+	public int binarySearch(List<String> listOfWords, String target) {
+		// if listOfWords is empty then return not found
+		if (listOfWords.size() == 0) return -1;
+		
+		// otherwise, recursively perform binary search to find target word
+		return binarySearchRecurse(listOfWords, target, 0, listOfWords.size() - 1);
+		
+		// otherwise, iteratively perform binary search to find target word
+		//return binarySearchIterative(listOfWords, target);
+	}
+	
+	/**
+	 *	Recursive binary search - find the target word in the list between low and
+	 *			high indices
+	 *	Precondition: list of words must be sorted in ascending order
+	 *	@param listOfWords		list of words to search
+	 *	@param target			the word to search for
+	 *	@param low				the low index of range to search
+	 *	@param high				the high index of range to search
+	 *	@return					if found, the index of the word inside words;
+	 *							if not found, a negative number
+	 */
+	public int binarySearchRecurse(List<String> listOfWords, String target,
+										int low, int high) {
+		// if low index is greater than high, target not found and return negative number
+		if (low > high) {
+			return -1;
 		}
-		System.out.println(" )");
+		// compute middle index
+		int mid = (low + high)/2;
+		// compare the target to the mid index
+		int compare = target.compareTo(listOfWords.get(mid));	
+		// if target is equal to mid then return the index of the matching word
+		if (compare == 0) {
+			return mid;
+		}	
+		// if target is less than mid, then check bottom of list recursively
+		if (compare < 0) {
+			return binarySearchRecurse(listOfWords, target, low, mid - 1);
+		}	
+		// otherwise, target is greater than mid so check top of list recursively
+		return binarySearchRecurse(listOfWords, target, mid + 1, high);	
 	}
 	
-	/*************************************************************/
-	/********************** Test program *************************/
-	/*************************************************************/
-	private final String FILE_NAME = "randomWords.txt";
+	/**
+	 *	Iterative binary search - find the target word in the list
+	 *	Precondition: list of words must be sorted in ascending order
+	 *	@param listOfWords		list of words to search
+	 *	@param target			the word to search for
+	 *	@return					if found, the index of the word inside words;
+	 *							if not found, a negative number
+	 */
+	public int binarySearchIterative(List<String> listOfWords, String target) {
+		// Insert your code here
+		int low = 0;
+		int high = listOfWords.size() - 1;
+		while (low <= high) {
+			int mid = (low + high)/2;
+			int compare = target.compareTo(listOfWords.get(mid));
+			
+			if (compare == 0) {
+				return mid;
+			}
+			else if (compare < 0) {
+				high = mid - 1;
+			}
+			else {
+				low = mid + 1;
+			}
+		}
+		
+		// if target not found in list return negative number
+		return -1;
+	}
 	
+	/********************************************************************/
+	/************************* Test program *****************************/
+	/********************************************************************/
+	private final String FILE_NAME = "randomWords.txt";	// list of random words
+
 	public static void main(String[] args) {
-		SortMethods se = new SortMethods();
-		se.run();
+		WordFinder wu = new WordFinder();
+		wu.run();
 	}
 	
 	public void run() {
-		List<String> arr = new ArrayList<String>();
-		// Fill List with random words from file		
-		fillArray(arr);
+		// 1. read the file of words
+		readWordsFromFile(FILE_NAME);
 		
-		System.out.println("\nMerge Sort");
-		System.out.println("Array before sort:");
-		printArray(arr);
+		// 2. sort the words
+		SortMethods sm = new SortMethods();
+		words = sm.mergeSort(words);
+		
+		// 3. find the words
+		System.out.println("\nTesting findWord method\n-----------------------");
+		String[] wordList = { "hello", "foo", "utilitarian", "frufru", 
+							  "student", "fubsy", "pulchritude", "callipygian",
+							  "whithersoever" };
+		for (int a = 0; a < wordList.length; a++) {
+			System.out.print("\"" + wordList[a] + "\"");
+			int index = findWord(wordList[a]);
+			if (index >= 0) System.out.println(" found, index = " + index);
+			else System.out.println(" NOT found");
+		}
+		
 		System.out.println();
-		mergeSort(arr);
-		System.out.println("Array after sort:");
-		printArray(arr);
-		System.out.println();
-	}
-	
-	// Fill String array with words
-	public void fillArray(List<String> arr) {
-		Scanner inFile = FileUtils.openToRead(FILE_NAME);
-		while (inFile.hasNext())
-			arr.add(inFile.next());
-		inFile.close();
 	}
 }
