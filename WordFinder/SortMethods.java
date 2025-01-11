@@ -13,12 +13,12 @@ import java.util.Scanner;		// for testing purposes
  *	@since	January 10 2025
  */
 public class SortMethods {
-	
+	String[] temp;
 	/**
 	 *	Merge Sort algorithm - in ascending order
 	 *	@param arr		List of String objects to sort
 	 */
-	public void mergeSort(List<String> arr) {
+	public List<String> mergeSort(List<String> arr) {
 		int n = arr.size();
         String[] yay = arr.toArray(new String[0]);
         temp = new String[n];
@@ -36,7 +36,7 @@ public class SortMethods {
 	 */
 	public void mergeSortRecurse(String[] a, int from, int to) {
 		if (to - from < 2) { // base case: 1 or 2 elements
-            if (to > from && a[to].compareTo(a[from]) > 0) {
+            if (to > from && a[to].compareTo(a[from]) < 0) {
                 String aTemp = a[to];
                 a[to] = a[from];
                 a[from] = aTemp;
@@ -65,7 +65,7 @@ public class SortMethods {
 
         // while both arrays have elements left unprocessed:
         while (i <= middle && j <= to) {
-            if (a[i].compareTo(a[j]) > 0) {
+            if (a[i].compareTo(a[j]) < 0) {
                 temp[k] = a[i];
                 i++;
             }
