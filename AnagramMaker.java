@@ -96,25 +96,22 @@ public class AnagramMaker {
     }
 
     public void phraseRecursion (String phrase, int numWords, int numPhrases, ArrayList<String> anagram) {
-        String newPhrase = phrase;
-        if (newPhrase.length() == 0 && anagram.size() == numWords && maxPhrases < numPhrases) {
+        if (phrase.length() == 0 && anagram.size() == numWords && maxPhrases < numPhrases) {
             for (int i = 0; i < anagram.size(); i++) {
                 System.out.print(anagram.get(i) + " ");
             }
             System.out.println();
             maxPhrases++;
         }
-        else {
-            ArrayList<String> allWords = wu.allWords(newPhrase);
+        else if (maxPhrases < numPhrases && numWords > 0) {
+            ArrayList<String> allWords = wu.allWords(phrase);
             for (int i = 0; i < allWords.size(); i++) {
-                String tempWord = allWords.get(i);
-                anagram.add(tempWord);
-                newPhrase = phrase;
-                for (int j = 0; j < tempWord.length(); j++) {
-                    newPhrase = newPhrase.replaceFirst(tempWord.charAt(j) + "", "");
+                anagram.add(allWords.get(i));
+                for (int j = 0; j < allWords.get(i).length(); j++) {
+                    phrase = phrase.replaceFirst(allWords.get(i).charAt(j) + "", "");
                 }
 
-                phraseRecursion(newPhrase, numWords, numPhrases, anagram);
+                phraseRecursion(phrase, numWords, numPhrases, anagram);
                 anagram.remove(anagram.get(anagram.size() - 1));
             }
         }
