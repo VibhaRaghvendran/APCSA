@@ -96,7 +96,7 @@ public class AnagramMaker {
     }
 
     public void phraseRecursion (String phrase, int numWords, int numPhrases, ArrayList<String> anagram) {
-        if (phrase.length() == 0 && anagram.size() == numWords && maxPhrases < numPhrases) {
+        if (phrase.length() == 0 && numWords == 0 && maxPhrases < numPhrases) {
             for (int i = 0; i < anagram.size(); i++) {
                 System.out.print(anagram.get(i) + " ");
             }
@@ -107,14 +107,18 @@ public class AnagramMaker {
             ArrayList<String> allWords = wu.allWords(phrase);
             for (int i = 0; i < allWords.size(); i++) {
                 anagram.add(allWords.get(i));
-                for (int j = 0; j < allWords.get(i).length(); j++) {
-                    phrase = phrase.replaceFirst(allWords.get(i).charAt(j) + "", "");
-                }
-
-                phraseRecursion(phrase, numWords, numPhrases, anagram);
+                phraseRecursion(removeLetters(phrase, allWords.get(i)), numWords - 1, numPhrases, anagram);
                 anagram.remove(anagram.get(anagram.size() - 1));
             }
         }
 
     }
+    
+    public String removeLetters (String str, String remove) {
+		for (int j = 0; j < remove.length(); j++) {
+             str = str.replaceFirst(remove.charAt(j) + "", "");
+        }
+        
+        return str;
+	}
 }
