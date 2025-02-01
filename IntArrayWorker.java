@@ -28,6 +28,10 @@ public class IntArrayWorker
     return total;
   }
   
+   /**
+   * Method to return the number of times a value is found 
+   * @return number of times a value is found in the array
+   */
   public int getCount(int value) {
 	  int count = 0;
 	  
@@ -42,6 +46,10 @@ public class IntArrayWorker
 	  return count;
   }
   
+  /**
+   * Method to return the largest value 
+   * @return largest value in the array
+   */
   public int getLargest () {
 	  int max = 0;
 	  
@@ -56,6 +64,10 @@ public class IntArrayWorker
 	  return max;
   }
   
+  /**
+   * Method to return the sum of values in a given column 
+   * @return sum of values in a given column
+   */
   public int getColTotal(int column) {
 	  int sum = 0;
 	  for(int i = 0; i < matrix.length; i++) {
@@ -65,6 +77,10 @@ public class IntArrayWorker
 	  return sum;
   }
   
+  /**
+   * Method to reverse the rows in a 2D array
+   * @return array with rows reversed
+   */
   public int[][] reverseRows (int[][] original) {
 	  for (int i = 0; i < original.length; i++) {
 		  for (int j = 0; j < original[i].length/2; j++) {
