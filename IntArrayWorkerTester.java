@@ -98,6 +98,7 @@ public class IntArrayWorkerTester
 	int [][] nums2 = {{1, 2, 3, 4}, {5, 6, 7, 8}};
 	worker.setMatrix(nums2);
 	
+	System.out.println();
 	System.out.println("Array before reverseRows:");
 	for (int i = 0; i < nums2.length; i++) {
 		for (int j = 0; j < nums2[i].length; j++) {
