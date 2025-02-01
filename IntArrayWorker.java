@@ -30,6 +30,7 @@ public class IntArrayWorker
   
    /**
    * Method to return the number of times a value is found 
+   * @param the value to look for 
    * @return number of times a value is found in the array
    */
   public int getCount(int value) {
@@ -66,6 +67,7 @@ public class IntArrayWorker
   
   /**
    * Method to return the sum of values in a given column 
+   * @param the column number
    * @return sum of values in a given column
    */
   public int getColTotal(int column) {
@@ -79,6 +81,7 @@ public class IntArrayWorker
   
   /**
    * Method to reverse the rows in a 2D array
+   * @param the original array
    * @return array with rows reversed
    */
   public int[][] reverseRows (int[][] original) {
