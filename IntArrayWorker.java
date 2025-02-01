@@ -42,6 +42,41 @@ public class IntArrayWorker
 	  return count;
   }
   
+  public int getLargest () {
+	  int max = 0;
+	  
+	  for (int i = 0; i < matrix.length; i++) {
+		  for (int j = 0; j < matrix[i].length; j++) {
+			  if (matrix[i][j] > max) {
+				  max = matrix[i][j];
+			  }
+		  }
+	  }
+	  
+	  return max;
+  }
+  
+  public int getColTotal(int column) {
+	  int sum = 0;
+	  for(int i = 0; i < matrix.length; i++) {
+		  sum += matrix[i][column];
+	  }
+	  
+	  return sum;
+  }
+  
+  public int[][] reverseRows (int[][] original) {
+	  for (int i = 0; i < original.length; i++) {
+		  for (int j = 0; j < original[i].length/2; j++) {
+			  int t = original[i][j];
+			  original[i][j] = original[i][original[i].length - 1 - j];
+			  original[i][original[i].length - 1 - j] = t;
+		  }
+	  }
+	  
+	  return original;
+  }
+  
   /**
    * Method to return the total using a nested for-each loop
    * @return the total of the values in the array
