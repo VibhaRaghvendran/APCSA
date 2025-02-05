@@ -235,7 +235,7 @@ public class Picture extends SimplePicture
 	  
 	  if (maxX*size < pixels.length) {
 		  for (int j = 0; j < pixels[0].length; j+=size) {
-			  for (int k = maxX*size; k < pixels.length; k++) {
+			  for (int k = maxY*size; k < pixels.length; k++) {
 				  for (int l = j; l < j+size; l++) {
 					  sumRed += pixels[k][l].getRed();
 					  sumGreen += pixels[k][l].getGreen();
@@ -260,7 +260,7 @@ public class Picture extends SimplePicture
 	  if (maxY*size < pixels[0].length) {
 		  for (int j = 0; j < pixels.length; j+=size) {
 			
-			  for (int k = maxY*size; k < pixels[0].length; k++) {
+			  for (int k = maxX*size; k < pixels[0].length; k++) {
 				  for (int l = j; l < j+size; l++) {
 					  sumRed += pixels[k][l].getRed();
 					  sumGreen += pixels[k][l].getGreen();
