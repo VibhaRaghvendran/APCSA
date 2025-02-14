@@ -44,37 +44,73 @@ public class PictureTester
     beach.explore();
   }
   
-  /** Method to test fixUnderwater */
-  public static void testFixUnderwater()
-  {
-    Picture beach = new Picture("images/water.jpg");
-    beach.explore();
-    beach.fixUnderwater();
-    beach.explore();
-  }
-  
-  /** Method to test watermark */
-  public static void testWatermark()
-  {
-    Picture beach = new Picture("images/beach.jpg");
-    beach.explore();
-    beach.watermark();
-    beach.explore();
-  }
-  
   /** Method to test pixelate */
   public static void testPixelate()
   {
     Picture beach = new Picture("images/beach.jpg");
     beach.explore();
-    beach.pixelate(7);
+    beach.pixelate(11);
+    beach.explore();
+  }
+  
+  /** Method to test blur */
+  public static void testBlur()
+  {
+    Picture beach = new Picture("images/beach.jpg");
+    beach.explore();
+    beach = beach.blur(11);
+    beach.explore();
+  }
+  
+  /** Method to test blur */
+  public static void testEnhance()
+  {
+    Picture beach = new Picture("images/beach.jpg");
+    beach.explore();
+    beach = beach.enhance(11);
+    beach.explore();
+  }
+  
+  /** Method to test swapLeftRight */
+  public static void testSwapLeftRight()
+  {
+    Picture beach = new Picture("images/beach.jpg");
+    beach.explore();
+    beach = beach.swapLeftRight();
+    beach.explore();
+  }
+  
+  /** Method to test stairStep */
+  public static void testStairStep()
+  {
+    Picture beach = new Picture("images/beach.jpg");
+    beach.explore();
+    beach = beach.stairStep(50, 15);
+    beach.explore();
+  }
+  
+  /** Method to test liquify */
+  public static void testLiquify()
+  {
+    Picture beach = new Picture("images/beach.jpg");
+    beach.explore();
+    beach = beach.liquify(250);
+    beach.explore();
+  }
+  
+  /** Method to test wavy */
+  public static void testWavy()
+  {
+    Picture beach = new Picture("images/redMotorcycle.jpg");
+    beach.explore();
+    beach = beach.wavy(25);
     beach.explore();
   }
   
   /** Method to test mirrorVertical */
   public static void testMirrorVertical()
   {
-    Picture caterpillar = new Picture("images/caterpillar.jpg");
+    Picture caterpillar = new Picture("caterpillar.jpg");
     caterpillar.explore();
     caterpillar.mirrorVertical();
     caterpillar.explore();
@@ -83,7 +119,7 @@ public class PictureTester
   /** Method to test mirrorTemple */
   public static void testMirrorTemple()
   {
-    Picture temple = new Picture("images/temple.jpg");
+    Picture temple = new Picture("temple.jpg");
     temple.explore();
     temple.mirrorTemple();
     temple.explore();
@@ -92,7 +128,7 @@ public class PictureTester
   /** Method to test the collage method */
   public static void testCollage()
   {
-    Picture canvas = new Picture("images/640x480.jpg");
+    Picture canvas = new Picture("640x480.jpg");
     canvas.createCollage();
     canvas.explore();
   }
@@ -100,10 +136,32 @@ public class PictureTester
   /** Method to test edgeDetection */
   public static void testEdgeDetection()
   {
-    Picture swan = new Picture("images/swan.jpg");
+    Picture swan = new Picture("swan.jpg");
     swan.edgeDetection(10);
     swan.explore();
   }
+  
+  /** Method to test edgeDetectionBelow */
+  public static void testEdgeDetectionBelow()
+  {
+    Picture swan = new Picture("images/swan.jpg");
+    swan.explore();
+    swan = swan.edgeDetectionBelow(10);
+    swan.explore();
+  }
+  
+  /** Method to test greenScreen */
+  public static void testGreenScreen()
+  {
+	Picture minion1 = new Picture("greenScreenImages/minion1GreenScreen.jpg");
+	minion1.explore();
+	Picture minion2 = new Picture("greenScreenImages/minion2GreenScreen.jpg");
+	minion2.explore();
+	// choose any picture to start since it will *not* be used
+	//Picture pic = new Picture("images/beach.jpg");
+	//Picture gScreen = pic.greenScreen();
+	//gScreen.explore();
+  } 
   
   /** Main method for testing.  Every class can have a main
     * method in Java */
@@ -119,8 +177,13 @@ public class PictureTester
     //testNegate();
     //testGrayscale();
     //testFixUnderwater();
-    //testWatermark();
     testPixelate();
+    //testBlur();
+    //testEnhance();
+    //testSwapLeftRight();
+    //testStairStep();
+    //testLiquify();
+    //testWavy();
     //testMirrorVertical();
     //testMirrorTemple();
     //testMirrorArms();
@@ -129,7 +192,8 @@ public class PictureTester
     //testCollage();
     //testCopy();
     //testEdgeDetection();
-    //testEdgeDetection2();
+    //testEdgeDetectionBelow();
+    //testGreenScreen();
     //testChromakey();
     //testEncodeAndDecode();
     //testGetCountRedOverValue(250);
